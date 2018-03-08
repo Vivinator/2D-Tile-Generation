@@ -4,20 +4,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class Player : MovingObject
 {
 
     public float restartLevelDelay = 1f;
+    public float speed = 4f;
 
     private Animator animator;
+    private Rigidbody2D rb2d;
     private int wallDamage = 1;
 
 	// Use this for initialization
-	/*protected override void Start ()
+	protected override void Start ()
     {
         animator = GetComponent<Animator>();
         base.Start();
-	}*/
+	}
 
     // Update is called once per frame
     void Update ()
@@ -35,21 +37,24 @@ public class Player : MonoBehaviour
 
         if (horizontal != 0 || vertical != 0)
         {
-            //AttemptMove<Wall>(horizontal, vertical);
+           AttemptMove<Wall>(horizontal, vertical);
+            Debug.Log(transform.position);
         }
+
+       
 	}
 
-    /*protected override void AttemptMove <T> (int xDir, int yDir)
+    protected override void AttemptMove <T> (int xDir, int yDir)
     {
         base.AttemptMove <T> (xDir, yDir);
 
-        //RaycastHit2D hit;
+        RaycastHit2D hit;
 
-        /*if (Move (xDir, yDir, out hit))
+        if (Move (xDir, yDir, out hit))
         {
 
         }
-    }*/
+    }
 
     private void OnTriggerEnter2D (Collider2D other)
     {
@@ -58,14 +63,19 @@ public class Player : MonoBehaviour
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         }
+
+        if (other.tag == "Wall")
+        {
+            
+        }
     }
 
-    /*protected override void OnCantMove <T> (T component)
+    protected override void OnCantMove <T> (T component)
     {
         Wall hitWall = component as Wall;
         hitWall.DamageWall(wallDamage);
         animator.SetTrigger("playerChop");
-    }*/
+    }
 
     private void Restart()
     {

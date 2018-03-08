@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
-    public float levelStartDelay = 2f;
+    public float levelStartDelay = 1f;
     public static GameManager instance = null;
-    public BoardManager boardScript;
+    public BoardCreator boardScript = new BoardCreator();
 
     private Text levelText;
     private GameObject levelImage;
-    private int level = 1;
+    private int level = 0;
     private bool doingSetup;
 
     // Use this for initialization
@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        //boardScript = GetComponent<BoardManager>();
         //InitGame();
     }
 
@@ -64,7 +63,7 @@ public class GameManager : MonoBehaviour
         levelImage.SetActive(true);
         Invoke("HideLevelImage", levelStartDelay);
 
-        //boardScript.SetupScene(level);
+        boardScript.SetupLevel();
     }
 
     private void HideLevelImage()

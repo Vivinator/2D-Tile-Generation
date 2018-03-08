@@ -19,6 +19,7 @@ public class BoardCreator : MonoBehaviour
     public GameObject[] floorTiles;                           // An array of floor tile prefabs.
     public GameObject[] wallTiles;                            // An array of wall tile prefabs.
     public GameObject[] outerWallTiles;                       // An array of outer wall tile prefabs.
+    public GameObject exit;
     public GameObject player;
 
     private TileType[][] tiles;                               // A jagged array of tile types representing the board, like a grid.
@@ -28,6 +29,11 @@ public class BoardCreator : MonoBehaviour
 
 
     private void Start()
+    {
+        SetupLevel();
+    }
+
+    public void SetupLevel()
     {
         // Create the board holder.
         boardHolder = new GameObject("BoardHolder");
@@ -78,6 +84,7 @@ public class BoardCreator : MonoBehaviour
 
         for (int i = 1; i < rooms.Length; i++)
         {
+            Debug.Log("Room " + i + " created");
             // Create a room.
             rooms[i] = new Room();
 
@@ -87,6 +94,7 @@ public class BoardCreator : MonoBehaviour
             // If we haven't reached the end of the corridors array...
             if (i < corridors.Length)
             {
+                Debug.Log("Corridor " + i + " created");
                 // ... create a corridor.
                 corridors[i] = new Corridor();
 
@@ -94,11 +102,19 @@ public class BoardCreator : MonoBehaviour
                 corridors[i].SetupCorridor(rooms[i], corridorLength, roomWidth, roomHeight, columns, rows, false);
             }
 
-            if (i == rooms.Length * .5f)
+            // When halfway through the room creation, place player prefab
+            if (i == 2)
             {
                 Debug.Log("Player instantiated");
                 Vector3 playerPos = new Vector3(rooms[i].xPos, rooms[i].yPos, 0);
                 Instantiate(player, playerPos, Quaternion.identity);
+            }
+
+            if (i == 4)
+            {
+                Debug.Log("Exit Tile instantiated");
+                Vector3 exitPos = new Vector3(rooms[i].xPos, rooms[i].yPos, 0);
+                Instantiate(exit, exitPos, Quaternion.identity);
             }
         }
 
